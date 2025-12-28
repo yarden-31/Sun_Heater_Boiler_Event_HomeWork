@@ -22,18 +22,28 @@ namespace Sun_Heater_Boiler_Event_HomeWork
 
         public event EventHandler<double> TargetReached;
 
-        public virtual void StartBoiler(double targetTemp)
+        public static void StartBoiling()
         {
-            double goalTemperature = targetTemp;
-            while (currentTemperature < goalTemperature)
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            DateTime currentTime = DateTime.Now;
+            // prepare to boil water
+            startTime = DateTime.Now;
+            Console.WriteLine($"Start preparing the water at {startTime.ToString()}");
+            WaterHeater waterHeater = new WaterHeater(100);
+            for (double temp = 0; temp <= 100; temp += 5)
             {
-                currentTemperature = currentTemperature + 2;
-                TemperatureChangedEventArgs args = new TemperatureChangedEventArgs();
                 Thread.Sleep(500);
-            }
-            if (currentTemperature >= goalTemperature)
-            {
-                TargetReached?.Invoke(this, currentTemperature);
+                TemperatureChangedEventArgs args = new TemperatureChangedEventArgs
+                {
+                    CurrentTemperature = temp,
+                    CurrentTimeWhenTakingTemperature1 = DateTime.Now
+                };
+                waterHeater.TemperatureChanged?.Invoke(waterHeater, args);
+                if (temp >= 100)
+                {
+                    waterHeater.TargetReached?.Invoke(waterHeater, temp);
+                }
             }
         }
     }

@@ -18,7 +18,7 @@ namespace Sun_Heater_Boiler_Event_HomeWork
         //-----------------------------------------------------------
 
         //בנאי
-        public TaskExecutor(int ms)
+        public TaskExecutor(string name, int ms)
         {
             this.timeInMiliSec = ms;
         }
@@ -36,6 +36,14 @@ namespace Sun_Heater_Boiler_Event_HomeWork
                 {
                     OnProgress(this, i = i + 2);
                 }
+            }
+        }
+
+        class WaterHeater : TaskExecutor
+        {
+            public WaterHeater(string name) : base(name, 7000)
+            {
+
             }
         }
     }
