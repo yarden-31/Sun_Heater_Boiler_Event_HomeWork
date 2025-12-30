@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,41 +9,41 @@ namespace Sun_Heater_Boiler_Event_HomeWork
 {
     internal class WaterHeater
     {
-        double currentTemperature;
+        private double currentTemperature;
 
-        public static DateTime startTime;
+        public event EventHandler<TemperatureEventArgs> OnTemperatureChange;
 
-        WaterHeater(double targetTemp)
+        public event EventHandler TragetReached;
+
+        public string TemperatureInFahrenheit
         {
-            double currentTemperature = targetTemp;
+            get
+            {
+                double fahrenheit = (currentTemperature * 9 / 5) + 32;
+                return $"{fahrenheit} °F";
+            }
         }
 
-        public event EventHandler<TemperatureChangedEventArgs> TemperatureChanged;
+        //-----------------------------------------------------------
 
-        public event EventHandler<double> TargetReached;
-
-        public static void StartBoiling()
+        public void StartBoiler(double targetTemperature)
         {
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-            DateTime currentTime = DateTime.Now;
-            // prepare to boil water
-            startTime = DateTime.Now;
-            Console.WriteLine($"Start preparing the water at {startTime.ToString()}");
-            WaterHeater waterHeater = new WaterHeater(100);
-            for (double temp = 0; temp <= 100; temp += 5)
+            while (currentTemperature < targetTemperature)
             {
-                Thread.Sleep(500);
-                TemperatureChangedEventArgs args = new TemperatureChangedEventArgs
+                Thread.Sleep(1500); // 1500 = 1.5 seconds
+                currentTemperature = currentTemperature + 0.5;
+                OnTemperatureChange?.Invoke(this, new TemperatureEventArgs(currentTemperature));
+                /*
+                if (OnTemperatureChange != null)
                 {
-                    CurrentTemperature = temp,
-                    CurrentTimeWhenTakingTemperature1 = DateTime.Now
-                };
-                waterHeater.TemperatureChanged?.Invoke(waterHeater, args);
-                if (temp >= 100)
-                {
-                    waterHeater.TargetReached?.Invoke(waterHeater, temp);
+                    OnTemperatureChange(this, new REDOING_TemperatureEventArgs(currentTemperature));
                 }
+                */
+            }
+
+            if (TragetReached != null)
+            {
+                TragetReached(this, new EventArgs());
             }
         }
     }
