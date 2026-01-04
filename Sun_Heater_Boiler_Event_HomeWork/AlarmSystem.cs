@@ -14,12 +14,14 @@ namespace Sun_Heater_Boiler_Event_HomeWork
             {
                 Console.WriteLine("Target Temperature Reached! Alarm Activated!");
                 Console.WriteLine($"Current Tempertature in Fahrenheit: {heater.TemperatureInFahrenheit}");
+                Console.WriteLine($"The Location of the Water Heater is: {heater.Location}");
             }
 
             if (sender is House h)
             {
 
             }
+
         }
     }
 }
