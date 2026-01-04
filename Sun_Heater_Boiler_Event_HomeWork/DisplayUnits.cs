@@ -11,7 +11,7 @@ namespace Sun_Heater_Boiler_Event_HomeWork
     {
         public void DisplayTemperature(object sender, TemperatureEventArgs Event)
         {
-            Console.Write($"\rCurrent Temperature: {Event.currentTemperature}°C at {Event.eventTime}       ");
+            Console.Write($"\rCurrent Temperature: {Event.currentTemperature}°C at {Event.eventTime}    ");
             Console.WriteLine($"The Location of the Water Heater is: {(sender as WaterHeater)?.Location}");
 
         }

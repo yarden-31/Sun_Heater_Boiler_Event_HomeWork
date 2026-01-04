@@ -48,8 +48,7 @@ namespace Sun_Heater_Boiler_Event_HomeWork
             {
                 totalCost += (int)cost;
             }
-
-
+            Console.WriteLine($"\nTotal Heating Cost for all Water Heaters: {totalCost} $");
         }
     }
 }
